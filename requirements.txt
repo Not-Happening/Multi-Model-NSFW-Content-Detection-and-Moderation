@@ -1,7 +1,8 @@
-flask==2.3.0
-flask-cors==4.0.0
-pillow==10.0.0
-requests==2.31.0
-python-dotenv==1.0.0
-transformers==4.36.0
-torch==2.1.0
+flask
+flask-cors
+pillow
+requests
+python-dotenv
+transformers
+torch
+gunicorn
