@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "NSFW Content Blocker",
+  "version": "1.0",
+  "description": "Covers NSFW images with black screens and educational facts",
+  "permissions": ["<all_urls>"],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ],
+  "host_permissions": ["<all_urls>"]
+}
