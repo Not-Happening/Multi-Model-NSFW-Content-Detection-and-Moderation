@@ -1,13 +1,13 @@
-import os
-import torch
-import random
-import requests
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+import requests
 from PIL import Image
 from io import BytesIO
 from dotenv import load_dotenv
+import os
 from transformers import SiglipImageProcessor, SiglipForImageClassification
+import torch
+import random
 
 load_dotenv()
 
@@ -17,7 +17,7 @@ CORS(app)
 # Load model and processor
 MODEL_PATH = os.getenv('MODEL_PATH', 'models/siglip_nsfw/final')
 BASE_MODEL = "google/siglip-base-patch16-256"
-device = "cpu"  # Railway uses CPU
+device = "mps" if torch.backends.mps.is_available() else "cpu"
 
 print(f"Loading model from {MODEL_PATH}...")
 processor = SiglipImageProcessor.from_pretrained(BASE_MODEL)
@@ -59,7 +59,7 @@ def classify_image():
         predicted_class = logits.argmax(-1).item()
         confidence = float(torch.softmax(logits, dim=-1).max().item())
         
-        # Check if NSFW (class 2 is "Normal")
+        # Check if NSFW (assuming class 2 is "Normal")
         is_nsfw = predicted_class != 2
         random_fact = random.choice(facts)
         label = LABEL_MAP.get(predicted_class, "Unknown")
@@ -78,5 +78,4 @@ def health():
     return jsonify({'status': 'ok'})
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
-    app.run(debug=False, port=port, host='0.0.0.0')
+    app.run(debug=False, port=5050, host='0.0.0.0')
